@@ -1,16 +1,19 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact } from 'redux/phonebookSlice';
-import ContactListItem from './ContactListItem';
+import { deleteContact, fetchContacts } from 'redux/phonebookSlice';
 
 const ContactList = () => {
+  const contacts = useSelector(state => state.phonebook.contacts.items);
+  const filter = useSelector(state => state.phonebook.filter);
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   const dispatch = useDispatch();
-  const filteredContacts = useSelector(state => {
-    const filter = state.phonebook.filter.toLowerCase();
-    return state.phonebook.contacts.filter(contact =>
-      contact.name.toLowerCase().includes(filter)
-    );
-  });
+
+  React.useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleDelete = id => {
     dispatch(deleteContact(id));
@@ -19,7 +22,10 @@ const ContactList = () => {
   return (
     <ul>
       {filteredContacts.map(contact => (
-        <ContactListItem key={contact.id} contact={contact} handleDelete={handleDelete} />
+        <li key={contact.id}>
+          {contact.name} - {contact.phone}{' '}
+          <button onClick={() => handleDelete(contact.id)}>Delete</button>
+        </li>
       ))}
     </ul>
   );

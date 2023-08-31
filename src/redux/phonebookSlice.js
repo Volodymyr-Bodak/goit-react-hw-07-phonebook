@@ -1,35 +1,59 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+export const fetchContacts = createAsyncThunk('contacts/fetchAll', async (_, { rejectWithValue }) => {
+  try {
+    const response = await fetch('https://64edeeac1f872182714208da.mockapi.io/contacts/contacts');
+    if (!response.ok) {
+      throw new Error('Failed to fetch contacts');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return rejectWithValue(error.message);
+  }
+});
+
+const initialState = {
+  contacts: {
+    items: [],
+    isLoading: false,
+    error: null,
+  },
+  filter: '',
+};
 
 const phonebookSlice = createSlice({
   name: 'phonebook',
-  initialState: {
-    contacts: [],
-    filter: '',
-  },
+  initialState,
   reducers: {
-    addContact: (state, action) => {
-      state.contacts.push(action.payload);
-    },
-    deleteContact: (state, action) => {
-      state.contacts = state.contacts.filter(contact => contact.id !== action.payload);
-    },    
     updateFilter: (state, action) => {
       state.filter = action.payload;
     },
+    addContact: (state, action) => {
+      state.contacts.items.push(action.payload);
+    },
+    deleteContact: (state, action) => {
+      state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
+    }
+    
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchContacts.pending, (state) => {
+        state.contacts.isLoading = true;
+        state.contacts.error = null;
+      })
+      .addCase(fetchContacts.fulfilled, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.items = action.payload;
+      })
+      .addCase(fetchContacts.rejected, (state, action) => {
+        state.contacts.isLoading = false;
+        state.contacts.error = action.payload;
+      });
   },
 });
 
-const persistConfig = {
-  key: 'root', 
-  storage,
-  blacklist: ['filter']
-};
+export const { updateFilter, addContact, deleteContact } = phonebookSlice.actions;
 
-const persistedPhonebookReducer = persistReducer(persistConfig, phonebookSlice.reducer);
-
-export const { addContact, deleteContact, updateFilter } = phonebookSlice.actions;
-
-
-export default persistedPhonebookReducer;
+export default phonebookSlice.reducer;
