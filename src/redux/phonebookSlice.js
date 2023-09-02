@@ -48,6 +48,6 @@ const phonebookSlice = createSlice({
   },
 });
 
-export const { updateFilter, addContact, deleteContact } = phonebookSlice.actions;
+export const { updateFilter, } = phonebookSlice.actions;
 
 export default phonebookSlice.reducer;
