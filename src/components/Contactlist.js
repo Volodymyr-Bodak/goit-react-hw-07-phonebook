@@ -17,16 +17,19 @@ const ContactList = () => {
 
   const handleDelete = id => {
     dispatch(deleteContact(id));
+    dispatch(fetchContacts());
+
   };
 
   return (
     <ul>
       {filteredContacts.map(contact => (
-        <li key={contact.id}>
-          {contact.name} {' '}
-          <button onClick={() => handleDelete(contact.id)}>Delete</button>
-        </li>
-      ))}
+  <li key={contact.id}>
+    {contact.name}{' '}
+    <button onClick={() => handleDelete(contact.id)}>Delete</button>
+  </li>
+))}
+
     </ul>
   );
 };

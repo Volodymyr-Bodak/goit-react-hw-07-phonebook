@@ -1,10 +1,12 @@
+// ContactForm.js
+
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/asyncActions'; // Import async actions
+import { addContact } from 'redux/asyncActions';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
-  const [newContact, setNewContact] = useState({ name: '', phone: '' });
+  const [newContact, setNewContact] = useState({ name: '', phone: '', id: Date.now() });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -16,8 +18,8 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addContact(newContact));
-    setNewContact({ name: '', phone: '' });
+    dispatch(addContact(newContact)); 
+    setNewContact({ name: '', phone: '', id: Date.now() }); 
   };
 
   return (
