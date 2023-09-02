@@ -29,12 +29,6 @@ const phonebookSlice = createSlice({
     updateFilter: (state, action) => {
       state.filter = action.payload;
     },
-    addContact: (state, action) => {
-      state.contacts.items.push(action.payload);
-    },
-    deleteContact: (state, action) => {
-      state.contacts.items = state.contacts.items.filter(contact => contact.id !== action.payload);
-    }
     
   },
   extraReducers: (builder) => {

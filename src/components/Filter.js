@@ -1,12 +1,13 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFilter } from 'redux/phonebookSlice';
+import { updateFilter } from 'redux/phonebookSlice'; 
+import { selectFilter } from 'redux/selectors';
 
 const Filter = () => {
-  const filter = useSelector(state => state.phonebook.filter);
+  const filter = useSelector(selectFilter);
   const dispatch = useDispatch();
 
-  const handleChangeFilter = event => {
+  const handleChangeFilter = (event) => {
     dispatch(updateFilter(event.target.value));
   };
 

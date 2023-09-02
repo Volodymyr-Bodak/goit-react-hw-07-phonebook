@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteContact, fetchContacts } from 'redux/phonebookSlice';
+import { deleteContact, fetchContacts } from 'redux/asyncActions';
 
 const ContactList = () => {
   const contacts = useSelector(state => state.phonebook.contacts.items);
@@ -23,7 +23,7 @@ const ContactList = () => {
     <ul>
       {filteredContacts.map(contact => (
         <li key={contact.id}>
-          {contact.name} - {contact.phone}{' '}
+          {contact.name} {' '}
           <button onClick={() => handleDelete(contact.id)}>Delete</button>
         </li>
       ))}

@@ -1,53 +1,42 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addContact } from 'redux/phonebookSlice';
-import styles from './ContactForm.module.css';
+import { useDispatch } from 'react-redux';
+import { addContact } from 'redux/asyncActions'; // Import async actions
 
 const ContactForm = () => {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const contacts = useSelector(state => state.phonebook.contacts.items);
-
   const dispatch = useDispatch();
+  const [newContact, setNewContact] = useState({ name: '', phone: '' });
 
-  const handleSubmit = event => {
-    event.preventDefault();
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewContact((prevContact) => ({
+      ...prevContact,
+      [name]: value,
+    }));
+  };
 
-    if (name.trim() === '' || phone.trim() === '') {
-      return;
-    }
-
-    const isContactExists = contacts.some(contact => contact.name.toLowerCase() === name.toLowerCase());
-
-    if (isContactExists) {
-      alert(`${name} is already in contacts`);
-      return;
-    }
-
-    dispatch(addContact({ name, phone }));
-    setName('');
-    setPhone('');
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(addContact(newContact));
+    setNewContact({ name: '', phone: '' });
   };
 
   return (
-    <form className={styles.formContainer} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <input
         type="text"
-        className={styles.formInput}
+        name="name"
+        value={newContact.name}
+        onChange={handleInputChange}
         placeholder="Name"
-        value={name}
-        onChange={e => setName(e.target.value)}
       />
       <input
         type="text"
-        className={styles.formInput}
+        name="phone"
+        value={newContact.phone}
+        onChange={handleInputChange}
         placeholder="Phone"
-        value={phone}
-        onChange={e => setPhone(e.target.value)}
       />
-      <button type="submit" className={styles.formButton}>
-        Add Contact
-      </button>
+      <button type="submit">Add Contact</button>
     </form>
   );
 };
