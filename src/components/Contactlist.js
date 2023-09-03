@@ -16,9 +16,9 @@ const ContactList = () => {
     dispatch(fetchContacts());
   }, [dispatch]);
 
-  const handleDelete = id => {
-    dispatch(deleteContact(id));
-    dispatch(fetchContacts());
+  const handleDelete =  async  id => {
+    await dispatch(deleteContact(id));
+    dispatch(fetchContacts()); 
 
   };
 
