@@ -5,6 +5,7 @@ import { deleteContact, fetchContacts } from 'redux/asyncActions';
 const ContactList = () => {
   const contacts = useSelector(state => state.phonebook.contacts.items);
   const filter = useSelector(state => state.phonebook.filter);
+  const isLoading = useSelector((state) => state.phonebook.contacts.isLoading); 
   const filteredContacts = contacts.filter(contact =>
     contact.name.toLowerCase().includes(filter.toLowerCase())
   );
@@ -22,15 +23,20 @@ const ContactList = () => {
   };
 
   return (
-    <ul>
-      {filteredContacts.map(contact => (
-  <li key={contact.id}>
-    {contact.name}{' '}
-    <button onClick={() => handleDelete(contact.id)}>Delete</button>
-  </li>
-))}
-
-    </ul>
+    <div>
+      {isLoading ? (
+        <div>Loading...</div>
+      ) : (
+        <ul>
+          {filteredContacts.map((contact) => (
+            <li key={contact.id}>
+              {contact.name}{' '}
+              <button onClick={() => handleDelete(contact.id)}>Delete</button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 };
 
