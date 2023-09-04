@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact, fetchContacts } from 'redux/asyncActions'; // Import both actions
+import { addContact, fetchContacts } from 'redux/phonebookSlice'; // Import both actions
 
 const ContactForm = () => {
   const dispatch = useDispatch();
