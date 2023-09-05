@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addContact, fetchContacts } from 'redux/phonebookSlice'; // Import both actions
+import { addContact,  } from 'redux/operations'; 
 
 const ContactForm = () => {
   const dispatch = useDispatch();
@@ -19,7 +19,6 @@ const ContactForm = () => {
     e.preventDefault();
     await dispatch(addContact(newContact));
     setNewContact({ name: '', phone: '', id: Date.now() });
-    dispatch(fetchContacts()); 
   };
 
   return (

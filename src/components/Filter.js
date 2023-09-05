@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateFilter } from 'redux/phonebookSlice'; 
+import { setFilter } from 'redux/filterSlice';
 import { selectFilter } from 'redux/selectors';
 
 const Filter = () => {
@@ -8,7 +8,7 @@ const Filter = () => {
   const dispatch = useDispatch();
 
   const handleChangeFilter = (event) => {
-    dispatch(updateFilter(event.target.value));
+    dispatch(setFilter(event.target.value));
   };
 
   return (
