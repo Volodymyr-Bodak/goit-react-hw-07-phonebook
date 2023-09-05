@@ -1,11 +1,18 @@
-
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { addContact,  } from 'redux/operations'; 
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addContact } from 'redux/operations';
+import styles from './ContactForm.module.css'; 
 
 const ContactForm = () => {
   const dispatch = useDispatch();
   const [newContact, setNewContact] = useState({ name: '', phone: '', id: Date.now() });
+  const [existingContactNames, setExistingContactNames] = useState([]);
+
+  const contacts = useSelector((state) => state.contacts.items);
+  useEffect(() => {
+    const contactNames = contacts.map((contact) => contact.name);
+    setExistingContactNames(contactNames);
+  }, [contacts]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -15,31 +22,27 @@ const ContactForm = () => {
     }));
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+   
+    if (existingContactNames.includes(newContact.name)) {
+      alert('Contact with the same name already exists!');
+      return;
+    }
+
     await dispatch(addContact(newContact));
     setNewContact({ name: '', phone: '', id: Date.now() });
   };
-  const isContactExist = contacts.find(
-    ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
-  );
-
-  if (isContactExist) {
-    alert(
-      `Contact with name ${contact.name} already exists!`,
-    );
-    return;
-  }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.formContainer} onSubmit={handleSubmit}>
       <input
         type="text"
         name="name"
         value={newContact.name}
         onChange={handleInputChange}
         placeholder="Name"
+        className={styles.formInput} 
       />
       <input
         type="text"
@@ -47,8 +50,9 @@ const ContactForm = () => {
         value={newContact.phone}
         onChange={handleInputChange}
         placeholder="Phone"
+        className={styles.formInput} 
       />
-      <button type="submit">Add Contact</button>
+      <button type="submit" className={styles.formButton}>Add Contact</button> {/* Use the CSS module class */}
     </form>
   );
 };

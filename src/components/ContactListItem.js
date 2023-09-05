@@ -8,10 +8,11 @@ const ContactListItem = ({ contact,}) => {
   const { id, name, number } = contact;
   const handleDelete = () => {
     dispatch(deleteContact(contact.id));
+    console.log(number);
   };
   return (
     <li key={id}>
-      {name}: {number}
+      {name}
       <button type="button" onClick={() => handleDelete(id)}>
         Delete
       </button>
