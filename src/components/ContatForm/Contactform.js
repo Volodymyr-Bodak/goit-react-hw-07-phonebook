@@ -15,11 +15,22 @@ const ContactForm = () => {
     }));
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(addContact(newContact));
     setNewContact({ name: '', phone: '', id: Date.now() });
   };
+  const isContactExist = contacts.find(
+    ({ name }) => name.toLowerCase() === contact.name.toLowerCase()
+  );
+
+  if (isContactExist) {
+    alert(
+      `Contact with name ${contact.name} already exists!`,
+    );
+    return;
+  }
 
   return (
     <form onSubmit={handleSubmit}>
